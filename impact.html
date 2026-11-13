@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#1F7A4D" />
+  <meta name="description" content="Community impact dashboard — Sahyog surplus food redistribution, Mathura." />
+  <title>Impact — Sahyog</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body data-role="donor">
+
+  <!-- Skip link for keyboard accessibility -->
+  <a href="#main-content" class="skip-link" id="skip-to-main">Skip to main content</a>
+
+  <!-- Shared Top Navbar (3-way role switcher) -->
+  <nav class="navbar" aria-label="Main navigation">
+    <a href="index.html" class="navbar-logo" aria-label="Sahyog home">
+      <div class="logo-icon" aria-hidden="true">🌿</div>
+      <span class="logo-text">Sahyog</span>
+    </a>
+    <div class="role-switcher role-switcher-3" role="group" aria-label="Switch demo view role">
+      <button class="role-btn active" data-role="donor" aria-pressed="true">Donor</button>
+      <button class="role-btn" data-role="volunteer" aria-pressed="false">Volunteer</button>
+      <button class="role-btn" data-role="shelter" aria-pressed="false">Shelter</button>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="main-content impact-page" id="main-content" tabindex="-1" aria-label="Community impact dashboard">
+
+    <!-- Hero -->
+    <section class="impact-hero" aria-labelledby="impact-heading">
+      <div class="impact-hero-eyebrow" aria-hidden="true">🌾 Mathura, Uttar Pradesh</div>
+      <h1 class="impact-hero-title" id="impact-heading">🌟 Community Impact</h1>
+      <p class="impact-hero-sub">Every meal saved is a story of kindness. Here's what Mathura has accomplished together.</p>
+      <div class="impact-total-pill" aria-label="Total meals saved: 18,740">
+        <span class="impact-total-num" id="stat-total-meals">18,740</span>
+        <span class="impact-total-label">total meals saved</span>
+      </div>
+    </section>
+
+    <!-- Stats Grid -->
+    <section class="impact-stats-grid" aria-label="Key impact metrics">
+
+      <div class="impact-stat-card" style="--card-accent:#1F7A4D;">
+        <div class="isc-icon" aria-hidden="true">🍛</div>
+        <div class="isc-value" id="stat-meals-today" aria-label="Meals saved today">342</div>
+        <div class="isc-label">Meals Saved Today</div>
+      </div>
+
+      <div class="impact-stat-card" style="--card-accent:#059669;">
+        <div class="isc-icon" aria-hidden="true">⚖️</div>
+        <div class="isc-value" id="stat-kg-rescued" aria-label="Kg food rescued">4,685</div>
+        <div class="isc-label">Kg Food Rescued</div>
+      </div>
+
+      <div class="impact-stat-card" style="--card-accent:#0D9488;">
+        <div class="isc-icon" aria-hidden="true">🌍</div>
+        <div class="isc-value" id="stat-co2-avoided" aria-label="Kg CO2 avoided">11,712</div>
+        <div class="isc-label">Kg CO₂ Avoided (2.5x)</div>
+      </div>
+
+      <div class="impact-stat-card" style="--card-accent:#F59E0B;">
+        <div class="isc-icon" aria-hidden="true">🙋</div>
+        <div class="isc-value" id="stat-vols-online" aria-label="Volunteers online">4</div>
+        <div class="isc-label">Volunteers Online</div>
+      </div>
+
+      <div class="impact-stat-card" style="--card-accent:#8B5CF6;">
+        <div class="isc-icon" aria-hidden="true">🏪</div>
+        <div class="isc-value" id="stat-donors-week" aria-label="Active donors this week">4</div>
+        <div class="isc-label">Active Donors This Week</div>
+      </div>
+
+    </section>
+
+    <!-- Chart Section -->
+    <section class="impact-section" aria-labelledby="chart-title">
+      <div class="impact-section-header">
+        <h2 class="impact-section-title" id="chart-title">📈 Meals Saved — Last 7 Days</h2>
+        <div class="chart-legend" aria-hidden="true">
+          <span class="legend-dot" style="background:#1F7A4D;"></span> Daily
+          <span class="legend-dot" style="background:#F59E0B; margin-left:12px;"></span> Today
+        </div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-wrap" aria-label="Bar chart showing meals saved per day over the last 7 days">
+          <canvas id="meals-chart"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <!-- Leaderboard Section -->
+    <section class="impact-section" aria-labelledby="lb-title">
+      <div class="impact-section-header">
+        <h2 class="impact-section-title" id="lb-title">🏆 Community Leaderboards</h2>
+      </div>
+      <div class="leaderboard-grid">
+
+        <!-- Donors Leaderboard -->
+        <div class="leaderboard-col">
+          <div class="leaderboard-col-header">
+            <span class="lb-col-icon" aria-hidden="true">🏪</span> Top Food Donors
+          </div>
+          <div id="donor-board" aria-label="Top donors ranked by meals donated"></div>
+        </div>
+
+        <!-- Volunteers Leaderboard -->
+        <div class="leaderboard-col">
+          <div class="leaderboard-col-header">
+            <span class="lb-col-icon" aria-hidden="true">🛵</span> Top Rescue Volunteers
+          </div>
+          <div id="volunteer-board" aria-label="Top volunteers ranked by completed trips"></div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Milestones Section -->
+    <section class="impact-section" aria-labelledby="milestones-title">
+      <div class="impact-section-header">
+        <h2 class="impact-section-title" id="milestones-title">🎯 Community Milestones</h2>
+      </div>
+      <div id="milestones-strip" aria-label="Community impact milestones"></div>
+    </section>
+
+    <!-- Share Section -->
+    <section class="impact-section share-section" aria-labelledby="share-title">
+      <div class="impact-section-header">
+        <h2 class="impact-section-title" id="share-title">📣 Share Your Community Impact</h2>
+      </div>
+      <p class="share-hint">Download or copy a verified summary tile of this week's food rescue progress in Mathura.</p>
+
+      <!-- Visual Share Tile -->
+      <div id="share-tile" class="share-tile-card" style="
+        background: linear-gradient(145deg, #1F7A4D 0%, #165C38 55%, #0D3D26 100%);
+        border-radius: 20px;
+        padding: 32px 28px 24px;
+        max-width: 480px;
+        margin: 0 auto 20px;
+        position: relative;
+        overflow: hidden;
+        color: #fff;
+      ">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:24px;position:relative;">
+          <div style="width:36px;height:36px;background:rgba(255,255,255,0.15);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;">🌿</div>
+          <span style="font-size:22px;font-weight:800;letter-spacing:-0.5px;">Sahyog</span>
+          <span style="margin-left:auto;font-size:11px;color:rgba(255,255,255,0.7);font-weight:500;">sahyog.in · Mathura, UP</span>
+        </div>
+
+        <div style="font-size:64px;font-weight:800;line-height:1;margin-bottom:4px;letter-spacing:-1px;" id="share-meals-total">2,072</div>
+        <div style="font-size:15px;color:rgba(255,255,255,0.8);font-weight:500;margin-bottom:20px;">
+          meals saved by neighbours this week in Mathura
+        </div>
+
+        <div style="height:2px;background:linear-gradient(90deg,#F59E0B,rgba(245,158,11,0));border-radius:2px;margin-bottom:18px;"></div>
+
+        <div style="display:flex;gap:10px;">
+          <div style="flex:1;background:rgba(255,255,255,0.12);border-radius:12px;padding:10px 8px;text-align:center;">
+            <div style="font-size:13px;font-weight:700;" id="share-kg">4,685 kg</div>
+            <div style="font-size:10px;color:rgba(255,255,255,0.7);margin-top:2px;">Food rescued</div>
+          </div>
+          <div style="flex:1;background:rgba(255,255,255,0.12);border-radius:12px;padding:10px 8px;text-align:center;">
+            <div style="font-size:13px;font-weight:700;" id="share-co2">11,712 kg CO₂</div>
+            <div style="font-size:10px;color:rgba(255,255,255,0.7);margin-top:2px;">Emissions saved</div>
+          </div>
+          <div style="flex:1;background:rgba(255,255,255,0.12);border-radius:12px;padding:10px 8px;text-align:center;">
+            <div style="font-size:13px;font-weight:700;" id="share-vols">4 volunteers</div>
+            <div style="font-size:10px;color:rgba(255,255,255,0.7);margin-top:2px;">Active volunteers</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action buttons -->
+      <div class="share-actions">
+        <button class="btn-share btn-share-primary" id="btn-download-img" aria-label="Download impact summary image">
+          📷 Download Image
+        </button>
+        <button class="btn-share btn-share-outline" id="btn-copy-text" aria-label="Copy impact summary text to clipboard">
+          📋 Copy Text
+        </button>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Bottom Navigation Tabs -->
+  <nav class="bottom-tabs" aria-label="Main tabs">
+    <a href="index.html" class="tab-item" aria-label="Home">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      Home
+    </a>
+    <a href="donate.html" class="tab-item" aria-label="Donate food">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Donate
+    </a>
+    <a href="map.html" class="tab-item" aria-label="Live map">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>
+      Live Map
+    </a>
+    <a href="impact.html" class="tab-item active" aria-current="page" aria-label="Community impact">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      Impact
+    </a>
+  </nav>
+
+  <!-- Demo footer -->
+  <footer class="demo-footer" aria-label="Demo controls">
+    <div class="demo-footer-info">
+      <span class="demo-badge" aria-hidden="true">🧪 DEMO MODE</span>
+      <span class="demo-sub">Mathura, UP</span>
+    </div>
+    <button class="btn-demo" id="btn-demo-mode" aria-label="Reset demo data and start guided tour">
+      ↺ Reset &amp; Tour
+    </button>
+  </footer>
+
+  <!-- Toast -->
+  <div class="toast-container" id="toast-container" aria-live="polite" aria-atomic="true"></div>
+
+  <!-- Scripts: No dependencies beyond Chart.js -->
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script src="pages/impact.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#1F7A4D" />
+  <meta name="description" content="Live map of surplus food listings in Mathura — Sahyog." />
+  <title>Live Map — Sahyog</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+</head>
+<body data-role="donor" class="map-page">
+
+  <!-- Skip link for keyboard accessibility -->
+  <a href="#main-content" class="skip-link" id="skip-to-main">Skip to main content</a>
+
+  <!-- Shared Top Navbar (3-way role switcher) -->
+  <nav class="navbar" aria-label="Main navigation">
+    <a href="index.html" class="navbar-logo" aria-label="Sahyog home">
+      <div class="logo-icon" aria-hidden="true">🌿</div>
+      <span class="logo-text">Sahyog</span>
+    </a>
+    <div class="role-switcher role-switcher-3" role="group" aria-label="Switch demo view role">
+      <button class="role-btn active" data-role="donor" aria-pressed="true">Donor</button>
+      <button class="role-btn"        data-role="volunteer" aria-pressed="false">Volunteer</button>
+      <button class="role-btn"        data-role="shelter" aria-pressed="false">Shelter</button>
+    </div>
+  </nav>
+
+  <!-- Split layout (Map + Feed) -->
+  <div class="map-layout" id="main-content" tabindex="-1">
+
+    <!-- LEFT: Map Panel -->
+    <div class="map-panel" role="region" aria-label="Interactive surplus food map">
+
+      <!-- Map Loading Skeleton -->
+      <div class="map-skeleton" id="map-skeleton" aria-label="Map loading">
+        <div class="map-skeleton-inner">
+          <div class="map-skel-icon" aria-hidden="true">🗺️</div>
+          <div class="map-skel-text">Loading Mathura map…</div>
+        </div>
+      </div>
+
+      <!-- Map Friendly Error State -->
+      <div class="map-error" id="map-error" style="display:none;" role="alert">
+        <div class="map-error-inner">
+          <div class="map-error-icon" aria-hidden="true">📡</div>
+          <div class="map-error-title">Map could not load</div>
+          <p class="map-error-desc">OpenStreetMap tiles may be unreachable or network is offline. You can still view and claim listings in the list below!</p>
+          <button class="btn-sm btn-primary" onclick="retryMapInit()">↺ Retry Map</button>
+        </div>
+      </div>
+
+      <!-- Map Empty State Overlay Pill -->
+      <div class="map-empty-pill" id="map-empty-pill" style="display:none;" aria-live="polite">
+        <span>🌾 No active pickup pins on map — new listings appear automatically</span>
+      </div>
+
+      <!-- Leaflet map container -->
+      <div id="live-map" aria-label="Leaflet map showing donors and pickup points in Mathura"></div>
+
+      <!-- Map Legend -->
+      <div class="map-legend" aria-label="Map pin color legend">
+        <div class="legend-title">📍 Pin Legend</div>
+        <div class="legend-row"><span class="legend-pin" style="background:#1F7A4D" aria-hidden="true"></span> &gt;3 hrs left</div>
+        <div class="legend-row"><span class="legend-pin" style="background:#F59E0B" aria-hidden="true"></span> 1–3 hrs left</div>
+        <div class="legend-row"><span class="legend-pin legend-pulse" style="background:#EF4444" aria-hidden="true"></span> &lt;1 hr urgent</div>
+        <div class="legend-row"><span class="legend-pin legend-house" aria-hidden="true">🏠</span> Shelter</div>
+        <div class="legend-sep"></div>
+        <div class="legend-row"><span class="legend-glow" style="background:#22C55E" aria-hidden="true"></span> Low need</div>
+        <div class="legend-row"><span class="legend-glow" style="background:#F59E0B" aria-hidden="true"></span> Medium</div>
+        <div class="legend-row"><span class="legend-glow" style="background:#F97316" aria-hidden="true"></span> High</div>
+        <div class="legend-row"><span class="legend-glow" style="background:#EF4444" aria-hidden="true"></span> Critical</div>
+      </div>
+    </div>
+
+    <!-- RIGHT: Feed Panel -->
+    <div class="feed-panel" role="region" aria-label="Food listings feed">
+
+      <!-- ── FEED HEADER (shown for donor + volunteer roles) ── -->
+      <div class="feed-header">
+        <div class="feed-header-top">
+          <div class="feed-header-title">
+            <span class="live-dot" aria-hidden="true"></span>
+            Live Listings
+          </div>
+          <div class="feed-header-actions">
+            <div class="feed-count-badge" id="live-count" aria-live="polite">— live</div>
+            <button class="my-drops-toggle" id="my-drops-toggle" onclick="toggleMyDrops()"
+                    aria-label="View my drops list" aria-expanded="false">
+              📋
+              <span class="my-drops-badge" id="my-drops-badge" style="display:none" aria-hidden="true">0</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Heatmap toggle row -->
+        <div class="heatmap-row" id="heatmap-row">
+          <label class="hm-label" for="heatmap-toggle">
+            🔥 Show where food is needed
+          </label>
+          <label class="hm-switch" aria-label="Toggle need heatmap overlay">
+            <input type="checkbox" id="heatmap-toggle" role="switch" aria-checked="false" />
+            <span class="hm-track" aria-hidden="true"><span class="hm-thumb"></span></span>
+          </label>
+        </div>
+
+        <!-- Filter chips -->
+        <div class="filter-row donor-vol-only" role="group" aria-label="Filter listings by type">
+          <button class="filter-chip active" data-filter="all" aria-pressed="true">All</button>
+          <button class="filter-chip" data-filter="cooked" aria-pressed="false">🍛 Cooked</button>
+          <button class="filter-chip" data-filter="groceries" aria-pressed="false">🛒 Groceries</button>
+          <button class="filter-chip" data-filter="under1hr" aria-pressed="false">🔥 Under 1 hr</button>
+        </div>
+
+        <div class="feed-count-label donor-vol-only" id="feed-count" aria-live="polite">Loading…</div>
+      </div>
+
+      <!-- My Drops slide-down panel -->
+      <div class="my-drops-panel" id="my-drops-panel" aria-label="My claimed drops">
+        <div class="my-drops-header">
+          <div class="my-drops-title">📋 My Active &amp; Past Drops</div>
+          <button class="my-drops-close" onclick="toggleMyDrops()" aria-label="Close my drops">✕</button>
+        </div>
+        <div class="my-drops-list" id="my-drops-list">
+          <div class="drops-empty">No claimed drops yet.</div>
+        </div>
+      </div>
+
+      <!-- ══ SHELTER MANAGER FORM (shown when role is shelter) ════ -->
+      <div class="shelter-wrap" id="shelter-wrap" aria-label="Shelter need updater">
+
+        <div class="shelter-form-header">
+          <div class="shelter-form-title">🏠 Update Tonight's Need</div>
+          <div class="shelter-form-sub">Tap once — volunteers will see this glowing on the map</div>
+        </div>
+
+        <!-- Pickup point selector -->
+        <div class="shelter-field">
+          <label class="shelter-label" for="shelter-select">Select your shelter / kitchen</label>
+          <select class="shelter-select" id="shelter-select" aria-label="Select community shelter">
+            <!-- populated by heatmap.js -->
+          </select>
+        </div>
+
+        <!-- Current need display -->
+        <div class="shelter-current" id="shelter-current-display" aria-live="polite">— loading —</div>
+
+        <!-- Meals stepper -->
+        <div class="shelter-field">
+          <label class="shelter-label">How many meals do you need tonight?</label>
+          <div class="shelter-stepper-row">
+            <button class="shelter-step-btn" id="shelter-minus" aria-label="Decrease meals needed">−</button>
+            <div class="shelter-qty-display" aria-live="polite">
+              <span id="shelter-qty">40</span>
+              <span class="shelter-qty-unit">meals</span>
+            </div>
+            <button class="shelter-step-btn" id="shelter-plus" aria-label="Increase meals needed">+</button>
+          </div>
+          <!-- Quick presets -->
+          <div class="shelter-presets" role="group" aria-label="Quick preset meal quantities">
+            <button class="shelter-preset" data-n="20" aria-label="20 meals">20</button>
+            <button class="shelter-preset" data-n="40" aria-label="40 meals">40</button>
+            <button class="shelter-preset" data-n="60" aria-label="60 meals">60</button>
+            <button class="shelter-preset" data-n="80" aria-label="80 meals">80</button>
+            <button class="shelter-preset" data-n="100" aria-label="100 meals">100</button>
+          </div>
+        </div>
+
+        <!-- Need level selector -->
+        <div class="shelter-field">
+          <label class="shelter-label">Need level tonight</label>
+          <div class="nl-row" role="group" aria-label="Select urgency need level">
+            <button class="nl-btn" data-level="Low"      style="--nl-c:#22C55E">🟢 Low</button>
+            <button class="nl-btn active" data-level="Medium"   style="--nl-c:#F59E0B">🟡 Medium</button>
+            <button class="nl-btn" data-level="High"     style="--nl-c:#F97316">🟠 High</button>
+            <button class="nl-btn" data-level="Critical" style="--nl-c:#EF4444">🔴 Critical</button>
+          </div>
+        </div>
+
+        <!-- Submit -->
+        <button class="shelter-submit-btn" id="shelter-submit" onclick="submitNeedUpdate()">
+          ✅ Update tonight's need
+        </button>
+
+        <!-- Note -->
+        <div class="shelter-note">
+          Your update appears as a glowing soft circle on the Live Map so donors and volunteers prioritize your shelter.
+        </div>
+
+        <!-- Current needs at all points -->
+        <div class="shelter-field">
+          <label class="shelter-label" style="margin-bottom:8px;">All shelter needs right now</label>
+          <div id="shelter-all-needs">
+            <!-- rendered by JS -->
+          </div>
+        </div>
+      </div><!-- /shelter-wrap -->
+
+      <!-- Scrollable listing cards -->
+      <div class="feed-scroll donor-vol-only" id="listing-feed" aria-live="polite" aria-label="Surplus food feed">
+
+        <!-- Feed skeleton shown while loading -->
+        <div id="feed-skeleton" aria-hidden="true">
+          <div class="feed-skel-card"><div class="skeleton-line sk-title"></div><div class="skeleton-line sk-body"></div></div>
+          <div class="feed-skel-card"><div class="skeleton-line sk-title"></div><div class="skeleton-line sk-body"></div></div>
+          <div class="feed-skel-card"><div class="skeleton-line sk-title"></div><div class="skeleton-line sk-body"></div></div>
+        </div>
+
+        <!-- Feed empty state -->
+        <div id="feed-empty" class="empty-state" style="display:none;" aria-live="polite">
+          <div class="empty-icon" aria-hidden="true">🍽️</div>
+          <div class="empty-title">No listings match this filter</div>
+          <p class="empty-desc">Check back soon or clear your filter — new surplus donations appear every few minutes.</p>
+          <div style="display:flex;gap:10px;margin-top:8px;">
+            <button class="btn-sm btn-outline" onclick="clearFeedFilter()">Show All</button>
+            <a href="donate.html" class="btn-sm btn-primary" style="text-decoration:none;">+ Post Surplus</a>
+          </div>
+        </div>
+
+        <!-- Feed friendly error state -->
+        <div id="feed-error" class="empty-state error-state" style="display:none;" role="alert">
+          <div class="empty-icon" aria-hidden="true">⚠️</div>
+          <div class="empty-title">Could not load food listings</div>
+          <p class="empty-desc">There was a temporary problem reading local listings data.</p>
+          <button class="btn-sm btn-primary" onclick="renderFeed()">↺ Reload Listings</button>
+        </div>
+
+      </div>
+
+    </div><!-- /feed-panel -->
+
+  </div><!-- /map-layout -->
+
+  <!-- ═══ CLAIM DRAWER ═══ -->
+  <div class="drawer-backdrop" id="drawer-backdrop" onclick="closeClaimDrawer()"></div>
+  <div class="claim-drawer" id="claim-drawer" role="dialog" aria-modal="true" aria-labelledby="claim-drawer-title">
+    <div class="claim-drawer-scroll" id="claim-drawer-body"></div>
+  </div>
+
+  <!-- ═══ DONOR HANDOFF CODE MODAL ═══ -->
+  <div class="code-modal-backdrop" id="code-modal" role="dialog" aria-modal="true" aria-labelledby="code-modal-title" onclick="event.target===this && closeCodeModal()">
+    <div class="code-modal-box">
+      <div class="code-modal-header">
+        <div class="code-modal-title" id="code-modal-title">🔐 Verify Volunteer</div>
+        <button class="code-modal-close" onclick="closeCodeModal()" aria-label="Close verification modal">✕</button>
+      </div>
+      <p class="code-modal-desc">Ask the volunteer to show you their 4-digit Handoff Code and enter it here to verify the right volunteer arrived.</p>
+      <div class="code-input-row">
+        <input type="number" id="code-modal-input" class="code-input"
+               placeholder="4-digit PIN" maxlength="4" inputmode="numeric" pattern="[0-9]*" aria-label="4 digit handoff code" />
+        <button class="code-verify-btn" onclick="submitCode()">Verify →</button>
+      </div>
+      <div class="code-modal-err" id="code-modal-err" style="display:none" role="alert"></div>
+      <div class="code-modal-ok"  id="code-modal-ok"  style="display:none" role="status">
+        <span>✅</span><span>Volunteer verified! Safe to hand over food.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Navigation Tabs -->
+  <nav class="bottom-tabs" aria-label="Main tabs">
+    <a href="index.html" class="tab-item" aria-label="Home">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      Home
+    </a>
+    <a href="donate.html" class="tab-item" aria-label="Donate food">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Donate
+    </a>
+    <a href="map.html" class="tab-item active" aria-current="page" aria-label="Live map">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>
+      Live Map
+    </a>
+    <a href="impact.html" class="tab-item" aria-label="Community impact">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      Impact
+    </a>
+  </nav>
+
+  <!-- Demo footer -->
+  <footer class="demo-footer" aria-label="Demo controls">
+    <div class="demo-footer-info">
+      <span class="demo-badge" aria-hidden="true">🧪 DEMO MODE</span>
+      <span class="demo-sub">Mathura, UP</span>
+    </div>
+    <button class="btn-demo" id="btn-demo-mode" aria-label="Reset demo data and start guided tour">
+      ↺ Reset &amp; Tour
+    </button>
+  </footer>
+
+  <div class="toast-container" id="toast-container" aria-live="polite" aria-atomic="true"></div>
+
+  <!-- Scripts -->
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="pages/map.js"></script>
+  <script src="pages/claim-flow.js"></script>
+  <script src="pages/heatmap.js"></script>
+
+  <!-- Shelter & error helper scripts -->
+  <script>
+    function clearFeedFilter() {
+      var allChip = document.querySelector('.filter-chip[data-filter="all"]');
+      if (allChip) allChip.click();
+    }
+
+    function retryMapInit() {
+      var errEl = document.getElementById('map-error');
+      if (errEl) errEl.style.display = 'none';
+      var skel = document.getElementById('map-skeleton');
+      if (skel) skel.classList.remove('hidden');
+      if (typeof initLeafletMap === 'function') initLeafletMap();
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      function renderAllNeeds() {
+        var el  = document.getElementById('shelter-all-needs');
+        if (!el) return;
+        var nd  = getNeedData();
+        el.innerHTML = SAHYOG_DATA.pickupPoints.map(function(p) {
+          var d   = nd[p.id] || { needLevel: 'Low', mealsNeeded: 20 };
+          var cfg = (typeof NEED_CFG !== 'undefined' && NEED_CFG[d.needLevel]) ? NEED_CFG[d.needLevel] : { color: '#22C55E', emoji: '🟢' };
+          return '<div class="all-need-row">' +
+            '<span class="all-need-dot" style="background:' + cfg.color + '" aria-hidden="true"></span>' +
+            '<span class="all-need-name">' + p.name.split(' ').slice(0,3).join(' ') + '</span>' +
+            '<span class="all-need-badge" style="color:' + cfg.color + ';background:' + cfg.color + '18">' +
+              cfg.emoji + ' ' + d.needLevel + ' &middot; ' + d.mealsNeeded + ' meals' +
+            '</span>' +
+          '</div>';
+        }).join('');
+      }
+      renderAllNeeds();
+      var origSubmit = window.submitNeedUpdate;
+      window.submitNeedUpdate = function() {
+        origSubmit && origSubmit();
+        setTimeout(renderAllNeeds, 300);
+      };
+    });
+  </script>
+</body>
+</html>

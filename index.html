@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#1F7A4D" />
+  <meta name="description" content="Sahyog — Hyper-local surplus food redistribution platform connecting donors with volunteers in Mathura, UP." />
+  <title>Sahyog — Surplus Food Redistribution</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body data-role="donor">
+
+  <!-- Skip link for keyboard accessibility -->
+  <a href="#main-content" class="skip-link" id="skip-to-main">Skip to main content</a>
+
+  <!-- Shared Top Navbar (3-way role switcher) -->
+  <nav class="navbar" aria-label="Main navigation">
+    <a href="index.html" class="navbar-logo" aria-label="Sahyog home">
+      <div class="logo-icon" aria-hidden="true">🌿</div>
+      <span class="logo-text">Sahyog</span>
+    </a>
+    <div class="role-switcher role-switcher-3" role="group" aria-label="Switch demo view role">
+      <button class="role-btn active" data-role="donor" aria-pressed="true">Donor</button>
+      <button class="role-btn" data-role="volunteer" aria-pressed="false">Volunteer</button>
+      <button class="role-btn" data-role="shelter" aria-pressed="false">Shelter</button>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="main-content" id="main-content" tabindex="-1">
+
+    <!-- Hero Section -->
+    <section class="hero" aria-labelledby="hero-heading">
+      <div class="hero-eyebrow" aria-hidden="true">🌾 Mathura, Uttar Pradesh</div>
+      <h1 class="hero-title" id="hero-heading">
+        Food that's <span class="accent">surplus to you</span> is a meal to someone
+      </h1>
+      <p class="hero-subtitle">
+        Connecting restaurants, sweet shops &amp; event venues with community kitchens, night shelters and caring volunteers across Mathura.
+      </p>
+      <div class="hero-actions">
+        <a href="donate.html" class="btn-hero-primary" id="cta-donate" role="button">
+          <span aria-hidden="true">🍱</span> I have surplus food
+        </a>
+        <a href="map.html" class="btn-hero-secondary" id="cta-volunteer" role="button">
+          <span aria-hidden="true">🙋</span> I want to help
+        </a>
+      </div>
+    </section>
+
+    <!-- Stats Strip -->
+    <div class="stats-strip" aria-label="Live community stats">
+      <div class="stats-strip-inner">
+        <div class="stat-item">
+          <div class="stat-value" id="stat-meals" aria-label="Meals saved today">342</div>
+          <div class="stat-label" aria-hidden="true">Meals Saved<br>Today</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value accent" id="stat-listings" aria-label="Active food listings">4</div>
+          <div class="stat-label" aria-hidden="true">
+            <span class="stat-pulse" aria-hidden="true"></span>Active<br>Listings
+          </div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value" id="stat-volunteers" aria-label="Volunteers online in Mathura">4</div>
+          <div class="stat-label" aria-hidden="true">Volunteers<br>Online</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Active Listings Section -->
+    <section class="section" aria-labelledby="listings-heading">
+      <div class="section-header">
+        <h2 class="section-title" id="listings-heading">🍛 Active Listings in Mathura</h2>
+        <a href="map.html" class="section-link" aria-label="See all active listings on live map">See all on map →</a>
+      </div>
+
+      <!-- Loading skeleton -->
+      <div id="listings-skeleton" aria-hidden="true">
+        <div class="skeleton-card"><div class="skeleton-line sk-title"></div><div class="skeleton-line sk-body"></div><div class="skeleton-line sk-body sk-short"></div></div>
+        <div class="skeleton-card"><div class="skeleton-line sk-title"></div><div class="skeleton-line sk-body"></div><div class="skeleton-line sk-body sk-short"></div></div>
+      </div>
+
+      <!-- Dynamic listings container -->
+      <div id="listings-container" aria-live="polite" aria-label="Surplus food listings">
+        <!-- Rendered by home.js -->
+      </div>
+
+      <!-- Empty state -->
+      <div id="listings-empty" class="empty-state" style="display:none;" aria-live="polite">
+        <div class="empty-icon" aria-hidden="true">🍽️</div>
+        <div class="empty-title">No active listings right now</div>
+        <p class="empty-desc">Be the first to list surplus food today — it only takes 30 seconds.</p>
+        <a href="donate.html" class="btn-sm btn-primary" style="display:inline-flex;text-decoration:none;max-width:200px;">
+          + Post Surplus Food
+        </a>
+      </div>
+
+      <!-- Error state -->
+      <div id="listings-error" class="empty-state error-state" style="display:none;" role="alert">
+        <div class="empty-icon" aria-hidden="true">⚠️</div>
+        <div class="empty-title">Could not load food listings</div>
+        <p class="empty-desc">There was a problem retrieving data from local storage.</p>
+        <button class="btn-sm btn-primary" onclick="renderListings()">↺ Try Again</button>
+      </div>
+    </section>
+
+    <!-- Role-Specific Views on Home Page -->
+
+    <!-- 1. Volunteer Callout (shown in Volunteer role) -->
+    <div class="volunteer-section" aria-label="Volunteer actions">
+      <div class="vt">🙌 Ready to make a difference?</div>
+      <div class="vs">
+        There are <strong id="vol-listings-count">3</strong> active pickups near you in Mathura right now.
+        Every trip you make feeds real people tonight.
+      </div>
+      <a href="map.html" class="btn-sm btn-primary" style="max-width:200px; text-decoration:none; display:inline-flex;">
+        🗺 Open Live Map
+      </a>
+    </div>
+
+    <!-- 2. Donor Callout (shown in Donor role) -->
+    <div class="section donor-only">
+      <div class="card listing-card available"
+           style="border-left-color:var(--accent);background:linear-gradient(135deg,#FEFCE8,#FEF3C7);">
+        <div class="listing-title" style="margin-bottom:8px;">📦 Have food to donate today?</div>
+        <p style="font-size:13px;color:#52525b;margin-bottom:16px;">
+          It takes under 30 seconds to post a listing. Volunteers are standing by in Mathura right now.
+        </p>
+        <a href="donate.html" class="btn-sm btn-primary"
+           style="max-width:200px;text-decoration:none;display:inline-flex;">
+          + Post Surplus Food
+        </a>
+      </div>
+    </div>
+
+    <!-- 3. Shelter Callout (shown in Shelter role) -->
+    <div class="section shelter-only">
+      <div class="card listing-card available"
+           style="border-left-color:#F97316;background:linear-gradient(135deg,#FFF7ED,#FFEDD5);">
+        <div class="listing-title" style="margin-bottom:8px;">🏠 Need surplus food for your shelter tonight?</div>
+        <p style="font-size:13px;color:#52525b;margin-bottom:16px;line-height:1.5;">
+          You are viewing as a Shelter / Community Kitchen manager. Update your nightly meal count on the Live Map so donors and volunteers can route food directly to your location.
+        </p>
+        <a href="map.html" class="btn-sm btn-primary"
+           style="max-width:240px;text-decoration:none;display:inline-flex;">
+          🗺 Open Live Map &amp; Update Needs
+        </a>
+      </div>
+    </div>
+
+    <!-- How It Works Section -->
+    <section class="how-it-works" aria-labelledby="how-title">
+      <div class="how-title" id="how-title">⚙️ How Sahyog Works</div>
+      <ol class="steps" aria-label="3 steps to redistribute food">
+        <li class="step">
+          <div class="step-num" aria-hidden="true">1</div>
+          <div class="step-text"><strong>Donors post surplus food</strong> — restaurants, sweet shops, and caterers list what's available, with quantity and expiry time in 30 seconds.</div>
+        </li>
+        <li class="step">
+          <div class="step-num" aria-hidden="true">2</div>
+          <div class="step-text"><strong>Volunteers see it on the Live Map</strong> — colour-coded pins reflect urgency; volunteers claim and route directly to the pickup point.</div>
+        </li>
+        <li class="step">
+          <div class="step-num" aria-hidden="true">3</div>
+          <div class="step-text"><strong>Food reaches the community</strong> — delivered safely with a 4-digit verification code to night shelters and community kitchens.</div>
+        </li>
+      </ol>
+    </section>
+
+  </main>
+
+  <!-- Bottom Navigation Tabs -->
+  <nav class="bottom-tabs" aria-label="Main tabs">
+    <a href="index.html" class="tab-item active" aria-current="page" aria-label="Home">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      Home
+    </a>
+    <a href="donate.html" class="tab-item" aria-label="Donate food">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Donate
+    </a>
+    <a href="map.html" class="tab-item" aria-label="Live map">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>
+      Live Map
+    </a>
+    <a href="impact.html" class="tab-item" aria-label="Community impact">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      Impact
+    </a>
+  </nav>
+
+  <!-- Demo footer -->
+  <footer class="demo-footer" aria-label="Demo controls">
+    <div class="demo-footer-info">
+      <span class="demo-badge" aria-hidden="true">🧪 DEMO MODE</span>
+      <span class="demo-sub">Mathura, UP</span>
+    </div>
+    <button class="btn-demo" id="btn-demo-mode" aria-label="Reset demo data and start guided tour">
+      ↺ Reset &amp; Tour
+    </button>
+  </footer>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toast-container" aria-live="polite" aria-atomic="true"></div>
+
+  <!-- Scripts -->
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+  <script src="pages/home.js"></script>
+
+</body>
+</html>

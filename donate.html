@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#1F7A4D" />
+  <meta name="description" content="Donate surplus food in under 30 seconds — Sahyog, Mathura." />
+  <title>Donate Food — Sahyog</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+</head>
+<body data-role="donor">
+
+  <!-- Skip link for keyboard accessibility -->
+  <a href="#donate-form-screen" class="skip-link" id="skip-to-main">Skip to main content</a>
+
+  <!-- Shared Top Navbar (3-way role switcher) -->
+  <nav class="navbar" aria-label="Main navigation">
+    <a href="index.html" class="navbar-logo" aria-label="Sahyog home">
+      <div class="logo-icon" aria-hidden="true">🌿</div>
+      <span class="logo-text">Sahyog</span>
+    </a>
+    <div class="role-switcher role-switcher-3" role="group" aria-label="Switch demo view role">
+      <button class="role-btn active" data-role="donor" aria-pressed="true">Donor</button>
+      <button class="role-btn" data-role="volunteer" aria-pressed="false">Volunteer</button>
+      <button class="role-btn" data-role="shelter" aria-pressed="false">Shelter</button>
+    </div>
+  </nav>
+
+  <!-- Progress bar + timer (sticky just below navbar) -->
+  <div class="donate-progress-bar-wrap" id="progress-bar-wrap" aria-hidden="true">
+    <div class="donate-progress-bg">
+      <div class="donate-progress-fill" id="progress-fill" style="width:0%" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Donation form progress"></div>
+    </div>
+    <div class="donate-timer" id="listing-timer" aria-live="off" title="Time taken to list">0s</div>
+  </div>
+
+  <!-- Shelter view banner (if role is shelter) -->
+  <div class="shelter-notice shelter-only" role="note">
+    <span>🏠 <strong>Shelter Manager Mode:</strong> Donors post surplus food on this page. To request food or update tonight's meal needs, <a href="map.html" style="color:var(--primary-dark);font-weight:700;text-decoration:underline;">visit the Live Map →</a></span>
+  </div>
+
+  <!-- ═══════════════════ FORM SCREEN ═══════════════════ -->
+  <main class="main-content donate-main" id="donate-form-screen" tabindex="-1" aria-label="Donate surplus food form">
+    <div id="main-content" style="position:relative;"></div>
+
+    <!-- ① Food type -->
+    <section class="donate-section" id="section-food-type" aria-labelledby="label-step-1">
+      <div class="donate-section-label" id="label-step-1">
+        <span class="step-badge" aria-hidden="true">1</span>
+        <span>What are you donating?</span>
+      </div>
+      <div class="food-type-grid" role="group" aria-label="Select food type category">
+        <button class="food-tile" data-type="Cooked Meals" data-emoji="🍛" aria-pressed="false" aria-label="Cooked Meals (Dal, sabzi, rice, roti)">
+          <span class="food-tile-emoji" aria-hidden="true">🍛</span>
+          <span class="food-tile-label">Cooked<br>Meals</span>
+        </button>
+        <button class="food-tile" data-type="Bakery" data-emoji="🍞" aria-pressed="false" aria-label="Bakery (Bread, buns, pav, rusks)">
+          <span class="food-tile-emoji" aria-hidden="true">🍞</span>
+          <span class="food-tile-label">Bakery</span>
+        </button>
+        <button class="food-tile" data-type="Fruits & Veg" data-emoji="🥦" aria-pressed="false" aria-label="Fruits and Vegetables">
+          <span class="food-tile-emoji" aria-hidden="true">🥦</span>
+          <span class="food-tile-label">Fruits<br>&amp; Veg</span>
+        </button>
+        <button class="food-tile" data-type="Packaged" data-emoji="📦" aria-pressed="false" aria-label="Packaged groceries (biscuits, namkeen, dry rations)">
+          <span class="food-tile-emoji" aria-hidden="true">📦</span>
+          <span class="food-tile-label">Packaged</span>
+        </button>
+        <button class="food-tile" data-type="Sweets" data-emoji="🍮" aria-pressed="false" aria-label="Sweets and Mithai (pedha, burfi, laddoo)">
+          <span class="food-tile-emoji" aria-hidden="true">🍮</span>
+          <span class="food-tile-label">Sweets</span>
+        </button>
+      </div>
+    </section>
+
+    <div class="donate-divider"></div>
+
+    <!-- ② Quantity -->
+    <section class="donate-section" id="section-quantity" aria-labelledby="label-step-2">
+      <div class="donate-section-label" id="label-step-2">
+        <span class="step-badge" aria-hidden="true">2</span>
+        <span>How much food?</span>
+      </div>
+
+      <!-- Unit chips -->
+      <div class="chip-row" id="unit-chips" role="group" aria-label="Select quantity unit">
+        <button class="chip active" data-unit="plates" aria-pressed="true">🍽 Plates</button>
+        <button class="chip" data-unit="kg" aria-pressed="false">⚖️ Kg</button>
+        <button class="chip" data-unit="packets" aria-pressed="false">📦 Packets</button>
+      </div>
+
+      <!-- Big stepper -->
+      <div class="qty-stepper-row">
+        <button class="qty-btn" id="qty-minus" aria-label="Decrease quantity">−</button>
+        <div class="qty-display" aria-live="polite">
+          <span id="qty-value">10</span>
+          <span class="qty-unit-label" id="qty-unit-display">plates</span>
+        </div>
+        <button class="qty-btn" id="qty-plus" aria-label="Increase quantity">+</button>
+      </div>
+
+      <!-- Quick picks -->
+      <div class="chip-row" role="group" aria-label="Quick pick quantity buttons">
+        <button class="chip chip-quick" data-qty="10" aria-label="Set quantity to 10">10</button>
+        <button class="chip chip-quick" data-qty="20" aria-label="Set quantity to 20">20</button>
+        <button class="chip chip-quick" data-qty="50" aria-label="Set quantity to 50">50</button>
+        <button class="chip chip-quick" data-qty="100" aria-label="Set quantity to 100">100</button>
+      </div>
+    </section>
+
+    <div class="donate-divider"></div>
+
+    <!-- ③ Good for -->
+    <section class="donate-section" id="section-expiry" aria-labelledby="label-step-3">
+      <div class="donate-section-label" id="label-step-3">
+        <span class="step-badge" aria-hidden="true">3</span>
+        <span>Good for how long?</span>
+      </div>
+      <div class="chip-row" id="expiry-chips" role="group" aria-label="Select shelf life">
+        <button class="chip" data-hours="1" aria-pressed="false">⏱ 1 hr</button>
+        <button class="chip" data-hours="2" aria-pressed="false">⏱ 2 hrs</button>
+        <button class="chip active" data-hours="4" aria-pressed="true">⏱ 4 hrs</button>
+        <button class="chip" data-hours="6" aria-pressed="false">⏱ 6 hrs</button>
+        <button class="chip" data-hours="12" aria-pressed="false">⏱ 12 hrs</button>
+      </div>
+    </section>
+
+    <div class="donate-divider"></div>
+
+    <!-- ④ Pickup location -->
+    <section class="donate-section" id="section-location" aria-labelledby="label-step-4">
+      <div class="donate-section-label" id="label-step-4">
+        <span class="step-badge" aria-hidden="true">4</span>
+        <span>Pickup location in Mathura</span>
+      </div>
+      <div class="location-card">
+        <div class="location-pin-row">
+          <div class="location-pin-icon" aria-hidden="true">📍</div>
+          <div class="location-details">
+            <div class="location-name" id="location-name">Brij Bhumi Dhaba</div>
+            <div class="location-address" id="location-address">Near Vishram Ghat, Mathura, UP 281001</div>
+          </div>
+          <button class="location-edit-btn" id="location-edit-btn" title="Edit location name" aria-label="Edit location name">✏️</button>
+        </div>
+        <div id="mini-map" class="mini-map" aria-label="Mini pickup location map"></div>
+        <div class="mini-map-hint">Tap map to reposition pickup location</div>
+      </div>
+    </section>
+
+    <div class="donate-divider"></div>
+
+    <!-- ⑤ Hygiene checklist -->
+    <section class="donate-section" id="section-hygiene" aria-labelledby="label-step-5">
+      <div class="donate-section-label" id="label-step-5">
+        <span class="step-badge" aria-hidden="true">5</span>
+        <span>Quick hygiene check</span>
+        <span class="safety-badge" id="safety-badge" style="display:none;" aria-live="polite">✅ Safety verified</span>
+      </div>
+      <div class="hygiene-list">
+        <label class="hygiene-toggle" for="hygiene-fresh">
+          <input type="checkbox" id="hygiene-fresh" role="switch" aria-checked="false" />
+          <span class="toggle-track" aria-hidden="true"><span class="toggle-thumb"></span></span>
+          <span class="toggle-label">🧑‍🍳 Freshly prepared</span>
+        </label>
+        <label class="hygiene-toggle" for="hygiene-covered">
+          <input type="checkbox" id="hygiene-covered" role="switch" aria-checked="false" />
+          <span class="toggle-track" aria-hidden="true"><span class="toggle-thumb"></span></span>
+          <span class="toggle-label">🫙 Stored covered</span>
+        </label>
+        <label class="hygiene-toggle" for="hygiene-unserved">
+          <input type="checkbox" id="hygiene-unserved" role="switch" aria-checked="false" />
+          <span class="toggle-track" aria-hidden="true"><span class="toggle-thumb"></span></span>
+          <span class="toggle-label">🚫 Not previously served</span>
+        </label>
+      </div>
+    </section>
+
+    <div class="donate-divider"></div>
+
+    <!-- Optional note -->
+    <section class="donate-section" aria-label="Optional note">
+      <label class="donate-section-label" for="donate-note" style="font-size:13px;color:var(--text-muted);font-weight:600;">
+        Note for volunteer <em style="font-weight:400;">(optional)</em>
+      </label>
+      <textarea
+        class="donate-note"
+        id="donate-note"
+        rows="2"
+        maxlength="140"
+        placeholder="e.g. Enter from back gate, ask for Ramesh bhaiya..."></textarea>
+    </section>
+
+    <!-- Big green post button -->
+    <div class="donate-submit-wrap">
+      <button class="btn-post-surplus" id="btn-post-surplus" disabled aria-label="Post surplus food">
+        <span id="post-btn-text">Select food type &amp; expiry to post</span>
+      </button>
+    </div>
+
+  </main>
+
+  <!-- ═══════════════════ SUCCESS SCREEN ═══════════════════ -->
+  <div class="success-screen" id="success-screen" style="display:none;" role="dialog" aria-modal="true" aria-labelledby="success-title">
+    <div class="success-inner">
+
+      <!-- Animated rings and icon -->
+      <div class="success-icon-wrap" aria-hidden="true">
+        <div class="success-ring success-ring-1"></div>
+        <div class="success-ring success-ring-2"></div>
+        <div class="success-checkmark">✅</div>
+      </div>
+
+      <!-- Time badge -->
+      <div class="success-time-badge" id="success-time-badge">Listed in 18s! ⚡</div>
+
+      <h2 class="success-title" id="success-title">Your food is listed!</h2>
+      <p class="success-subtitle">
+        Volunteers near Mathura have been alerted.<br>Someone will arrive shortly for pickup.
+      </p>
+
+      <!-- Summary card (filled by JS) -->
+      <div class="success-summary-card" id="success-summary-card"></div>
+
+      <!-- Actions -->
+      <div class="success-actions">
+        <a href="map.html" class="btn-sm btn-primary" style="text-decoration:none; justify-content:center; flex:1;">
+          🗺 Watch on Live Map
+        </a>
+        <button class="btn-sm btn-outline" id="btn-post-another" style="flex:1;">
+          + Post Another
+        </button>
+      </div>
+
+      <a href="index.html" style="margin-top:20px; font-size:13px; color:var(--text-muted); text-decoration:none;">
+        ← Back to Home
+      </a>
+
+    </div>
+  </div>
+
+  <!-- Bottom Navigation Tabs -->
+  <nav class="bottom-tabs" aria-label="Main tabs">
+    <a href="index.html" class="tab-item" aria-label="Home">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      Home
+    </a>
+    <a href="donate.html" class="tab-item active" aria-current="page" aria-label="Donate food">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Donate
+    </a>
+    <a href="map.html" class="tab-item" aria-label="Live map">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>
+      Live Map
+    </a>
+    <a href="impact.html" class="tab-item" aria-label="Community impact">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      Impact
+    </a>
+  </nav>
+
+  <!-- Demo footer -->
+  <footer class="demo-footer" aria-label="Demo controls">
+    <div class="demo-footer-info">
+      <span class="demo-badge" aria-hidden="true">🧪 DEMO MODE</span>
+      <span class="demo-sub">Mathura, UP</span>
+    </div>
+    <button class="btn-demo" id="btn-demo-mode" aria-label="Reset demo data and start guided tour">
+      ↺ Reset &amp; Tour
+    </button>
+  </footer>
+
+  <!-- Toast -->
+  <div class="toast-container" id="toast-container" aria-live="polite" aria-atomic="true"></div>
+
+  <!-- Scripts -->
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="pages/donate.js"></script>
+</body>
+</html>

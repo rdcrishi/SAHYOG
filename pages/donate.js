@@ -158,11 +158,16 @@ function initMiniMap() {
     attributionControl: false
   }).setView([state.locationLat, state.locationLng], 15);
 
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-    attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
-    subdomains: 'abcd',
+  var miniTiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap contributors',
     maxZoom: 19
   }).addTo(miniMap);
+
+  miniTiles.on('tileerror', function(error) {
+    if (error && error.tile && error.tile.src && error.tile.src.indexOf('openstreetmap.fr') === -1) {
+      error.tile.src = error.tile.src.replace('tile.openstreetmap.org', 'a.tile.openstreetmap.fr/hot');
+    }
+  });
 
   var greenIcon = L.divIcon({
     className: '',

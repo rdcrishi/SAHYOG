@@ -171,11 +171,17 @@ function initLeafletMap() {
     leafletMap = L.map('live-map', { zoomControl: true, attributionControl: false })
       .setView([27.4924, 77.6737], 13);
 
-    var tileLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-      attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
-      subdomains: 'abcd',
+    var tileLayer = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors',
       maxZoom: 19
     }).addTo(leafletMap);
+
+    // Automatic fallback to Humanitarian OSM if tile fails
+    tileLayer.on('tileerror', function(error) {
+      if (error && error.tile && error.tile.src && error.tile.src.indexOf('openstreetmap.fr') === -1) {
+        error.tile.src = error.tile.src.replace('tile.openstreetmap.org', 'a.tile.openstreetmap.fr/hot');
+      }
+    });
 
     // Hide map skeleton once tiles start loading
     leafletMap.once('load', function() {

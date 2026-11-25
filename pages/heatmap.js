@@ -25,7 +25,7 @@ function setHeatmap(on) {
 
 function drawHeatmap() {
   clearHeatmap();
-  if (typeof leafletMap === 'undefined') return;
+  if (typeof leafletMap === 'undefined' || !leafletMap) return;
   var needData = getNeedData();
 
   SAHYOG_DATA.pickupPoints.forEach(function(p) {
@@ -82,7 +82,7 @@ function drawHeatmap() {
 }
 
 function clearHeatmap() {
-  if (typeof leafletMap === 'undefined') return;
+  if (typeof leafletMap === 'undefined' || !leafletMap) return;
   hmLayers.forEach(function(l) { leafletMap.removeLayer(l); });
   hmLayers = [];
 }

@@ -86,17 +86,15 @@ function renderListings() {
 }
 
 function claimListing(id) {
-  var listings = getListings();
-  var idx = listings.findIndex(function(l) { return l.id === id; });
-  if (idx === -1) return;
-  listings[idx].status = 'claimed';
-  saveListings(listings);
-  showToast('🎉 Pickup claimed! Head over to collect.', 'success');
-  renderListings();
-  updateStats();
+  applyRole('volunteer');
+  try {
+    sessionStorage.setItem('sahyog_open_claim', id);
+  } catch(e) {}
+  window.location.href = 'map.html?claim=' + encodeURIComponent(id);
 }
 
 function editListing(id) {
+  applyRole('donor');
   window.location.href = 'donate.html';
 }
 
@@ -134,6 +132,21 @@ function updateStats() {
 document.addEventListener('DOMContentLoaded', function() {
   updateStats();
   renderListings();
+
+  // CTA button role helpers
+  var donBtn = document.getElementById('cta-donate');
+  if (donBtn) {
+    donBtn.addEventListener('click', function() {
+      applyRole('donor');
+    });
+  }
+
+  var volBtn = document.getElementById('cta-volunteer');
+  if (volBtn) {
+    volBtn.addEventListener('click', function() {
+      applyRole('volunteer');
+    });
+  }
 
   // Re-render on role change
   document.addEventListener('rolechange', function() {

@@ -233,6 +233,7 @@ function initLeafletMap() {
 
 // ── Add / refresh a listing marker ────────────────────────
 function addMarker(listing) {
+  if (!leafletMap) return;
   if (markerMap[listing.id]) {
     leafletMap.removeLayer(markerMap[listing.id]);
     delete markerMap[listing.id];
@@ -475,7 +476,7 @@ function pinUnhighlight(id) {
 }
 function zoomToPin(id) {
   var m = markerMap[id];
-  if (!m) return;
+  if (!m || !leafletMap) return;
   leafletMap.setView(m.getLatLng(), 15, { animate: true });
   m.openPopup();
 }

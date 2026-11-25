@@ -398,7 +398,7 @@ function showDelivered() {
       '<p class="delivered-msg">You helped feed <strong>' + c.mealCount + ' people</strong> in Mathura.<br>Every trip matters. Thank you! 🙏</p>' +
       '<div class="delivered-stats-row">' +
         '<div class="del-stat"><div class="del-stat-val">' + c.mealCount + '</div><div class="del-stat-lbl">Meals</div></div>' +
-        '<div class="del-stat"><div class="del-stat-val">~' + Math.round(c.mealCount * 0.5) + 'g</div><div class="del-stat-lbl">CO₂ saved</div></div>' +
+        '<div class="del-stat"><div class="del-stat-val">~' + (Math.round(c.mealCount * 0.25 * 2.5 * 10) / 10) + ' kg</div><div class="del-stat-lbl">CO₂ avoided</div></div>' +
         '<div class="del-stat"><div class="del-stat-val">' + c.estMin + 'm</div><div class="del-stat-lbl">Trip</div></div>' +
       '</div>' +
       '<div class="delivered-actions">' +
@@ -523,25 +523,10 @@ function toggleMyDrops() {
 // ── OVERRIDE claimById from map.js ─────────────────────────
 // (this file loads after map.js, so this definition wins)
 function claimById(id) {        // eslint-disable-line no-redeclare
-  if (currentRole === 'volunteer') {
-    openClaimDrawer(id);
-  } else {
-    // Donor just closes listing without full flow
-    var listings = getListings();
-    var idx = listings.findIndex(function(l) { return l.id === id; });
-    if (idx !== -1 && listings[idx].status !== 'claimed') {
-      listings[idx].status = 'claimed';
-      saveListings(listings);
-      if (typeof leafletMap !== 'undefined') {
-        if (markerMap && markerMap[id]) { leafletMap.removeLayer(markerMap[id]); delete markerMap[id]; }
-        leafletMap.closePopup();
-      }
-      removeFeedCard(id);
-      showToast('Listing marked claimed.', 'success');
-    } else {
-      showToast('Already claimed!', '');
-    }
+  if (currentRole !== 'volunteer') {
+    applyRole('volunteer');
   }
+  openClaimDrawer(id);
 }
 
 // ── INIT ───────────────────────────────────────────────────
@@ -567,4 +552,16 @@ document.addEventListener('DOMContentLoaded', function() {
   document.addEventListener('rolechange', function() {
     if (activeClaim) renderDrawerContent();
   });
+
+  // Check if opened from Home page or external link with a target claim
+  try {
+    var urlParams = new URLSearchParams(window.location.search);
+    var targetClaimId = urlParams.get('claim') || sessionStorage.getItem('sahyog_open_claim');
+    if (targetClaimId) {
+      sessionStorage.removeItem('sahyog_open_claim');
+      setTimeout(function() {
+        claimById(targetClaimId);
+      }, 500);
+    }
+  } catch(e) {}
 });

@@ -73,8 +73,8 @@ function openClaimDrawer(listingId) {
   if (listing.lat && listing.lng) { dlat = listing.lat; dlng = listing.lng; }
   else {
     var donor = SAHYOG_DATA.donors.find(function(d) { return d.id === listing.donorId; });
-    dlat = donor ? donor.lat : 27.4924;
-    dlng = donor ? donor.lng : 77.6737;
+    dlat = donor ? donor.lat : 25.1735;
+    dlng = donor ? donor.lng : 75.8480;
   }
 
   var nn      = nearestPickup(dlat, dlng);
@@ -395,7 +395,7 @@ function showDelivered() {
       '<div class="delivered-hl-pill">Drop complete!</div>' +
       '<div class="delivered-big">' + c.mealCount + '</div>' +
       '<div class="delivered-big-label">people fed tonight</div>' +
-      '<p class="delivered-msg">You helped feed <strong>' + c.mealCount + ' people</strong> in Mathura.<br>Every trip matters. Thank you! 🙏</p>' +
+      '<p class="delivered-msg">You helped feed <strong>' + c.mealCount + ' people</strong> in Kota.<br>Every trip matters. Thank you! 🙏</p>' +
       '<div class="delivered-stats-row">' +
         '<div class="del-stat"><div class="del-stat-val">' + c.mealCount + '</div><div class="del-stat-lbl">Meals</div></div>' +
         '<div class="del-stat"><div class="del-stat-val">~' + (Math.round(c.mealCount * 0.25 * 2.5 * 10) / 10) + ' kg</div><div class="del-stat-lbl">CO₂ avoided</div></div>' +

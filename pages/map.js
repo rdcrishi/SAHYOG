@@ -1,8 +1,8 @@
 // pages/map.js — Live Map page logic
 
-// ── Simulated user location (Mathura city centre) ──────────
-var USER_LAT = 27.4950;
-var USER_LNG = 77.6700;
+// ── Simulated user location (Kota city centre, Rajasthan) ──
+var USER_LAT = 25.1760;
+var USER_LNG = 75.8400;
 
 // ── State ──────────────────────────────────────────────────
 var leafletMap = null;
@@ -40,7 +40,7 @@ function haversine(lat1, lng1, lat2, lng2) {
 function listingLatLng(listing) {
   if (listing.lat && listing.lng) return [listing.lat, listing.lng];
   var d = SAHYOG_DATA.donors.find(function(x){ return x.id === listing.donorId; });
-  return d ? [d.lat, d.lng] : [27.4924, 77.6737];
+  return d ? [d.lat, d.lng] : [25.1735, 75.8480];
 }
 function distKm(listing) {
   var ll = listingLatLng(listing);
@@ -169,7 +169,7 @@ function initLeafletMap() {
     }
 
     leafletMap = L.map('live-map', { zoomControl: true, attributionControl: false })
-      .setView([27.4924, 77.6737], 13);
+      .setView([25.1760, 75.8400], 13);
 
     var tileLayer = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors',
@@ -534,7 +534,7 @@ function spawnSimListing() {
   // Realistic remaining time between 20 minutes and 5 hours (20 to 300 minutes)
   var minutes = Math.floor(20 + Math.random() * 280);
 
-  // Realistic latitude/longitude variety across Mathura within ~3 km
+  // Realistic latitude/longitude variety across Kota within ~3 km
   var latOffset = (Math.random() - 0.5) * 0.025;
   var lngOffset = (Math.random() - 0.5) * 0.025;
 

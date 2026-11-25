@@ -96,8 +96,8 @@ function computeMatch(listing) {
   if (listing.lat && listing.lng) { dlat = listing.lat; dlng = listing.lng; }
   else {
     var d = SAHYOG_DATA.donors.find(function(x) { return x.id === listing.donorId; });
-    dlat = d ? d.lat : 27.4924;
-    dlng = d ? d.lng : 77.6737;
+    dlat = d ? d.lat : 25.1735;
+    dlng = d ? d.lng : 75.8480;
   }
 
   var timeLeftMin = Math.max(1, (listing.expiresAt - Date.now()) / 60000);

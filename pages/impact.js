@@ -2,11 +2,11 @@
 
 // ── Mock data ──────────────────────────────────────────────────────
 var DONOR_STATS = [
-  { id: 'd1', name: 'Brij Bhumi Dhaba',       type: 'Restaurant',    meals: 1240, drops: 32, badges: ['communityStar', 'hundredMeals', 'zeroWaste'] },
-  { id: 'd2', name: 'Krishna Sweets & Farsan', type: 'Sweet Shop',    meals: 980,  drops: 28, badges: ['hundredMeals', 'speedDonor'] },
-  { id: 'd5', name: 'Govind Caterers',          type: 'Catering',      meals: 840,  drops: 24, badges: ['hundredMeals', 'firstRescue'] },
-  { id: 'd4', name: 'Mathura Fresh Mart',       type: 'Grocery Store', meals: 620,  drops: 18, badges: ['firstRescue', 'speedDonor'] },
-  { id: 'd3', name: 'Radha Banquet Hall',       type: 'Wedding Venue', meals: 390,  drops: 11, badges: ['firstRescue'] }
+  { id: 'd1', name: 'Chambal Dhaba & Restaurant',  type: 'Restaurant',      meals: 1240, drops: 32, badges: ['communityStar', 'hundredMeals', 'zeroWaste'] },
+  { id: 'd2', name: 'Jodhpur Sweets & Namkeen',   type: 'Sweet Shop',      meals: 980,  drops: 28, badges: ['hundredMeals', 'speedDonor'] },
+  { id: 'd5', name: 'Radhey Caterers & Mess',     type: 'Catering & Mess', meals: 840,  drops: 24, badges: ['hundredMeals', 'firstRescue'] },
+  { id: 'd4', name: 'Kota Fresh Mart',            type: 'Grocery Store',   meals: 620,  drops: 18, badges: ['firstRescue', 'speedDonor'] },
+  { id: 'd3', name: 'Hadoti Banquet & Resort',    type: 'Wedding Venue',   meals: 390,  drops: 11, badges: ['firstRescue'] }
 ];
 
 var BADGES = {
@@ -304,7 +304,7 @@ function downloadShareImage() {
     ctx.fillStyle = 'rgba(255, 255, 255, 0.75)';
     ctx.font = '600 20px Inter, -apple-system, sans-serif';
     ctx.textAlign = 'right';
-    ctx.fillText('sahyog.in · Mathura, UP', 900, 85);
+    ctx.fillText('sahyog.in · Kota, RJ', 900, 85);
     ctx.textAlign = 'left';
 
     // Big Meals Number
@@ -315,7 +315,7 @@ function downloadShareImage() {
     // Subtitle
     ctx.fillStyle = 'rgba(255, 255, 255, 0.85)';
     ctx.font = '600 26px Inter, -apple-system, sans-serif';
-    ctx.fillText('meals saved by neighbours this week in Mathura', 60, 268);
+    ctx.fillText('meals saved by neighbours this week in Kota', 60, 268);
 
     // Accent line
     var lineGrad = ctx.createLinearGradient(60, 310, 900, 310);
@@ -384,7 +384,7 @@ function copyShareText() {
   var total   = weekly.reduce(function(a, b) { return a + b; }, 0);
   var kg      = Math.round(impact.totalMealsSaved / 4);
   var co2     = Math.round(kg * 2.5);
-  var text    = 'This week, Sahyog neighbours saved ' + total.toLocaleString('en-IN') + ' meals in Mathura! ' +
+  var text    = 'This week, Sahyog neighbours saved ' + total.toLocaleString('en-IN') + ' meals in Kota! ' +
                 'Together we rescued ' + kg.toLocaleString('en-IN') + ' kg of food and avoided ' + co2.toLocaleString('en-IN') + ' kg of CO\u2082. ' +
                 'Join us at sahyog.in 🌿';
 

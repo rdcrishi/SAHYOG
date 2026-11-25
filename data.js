@@ -1,25 +1,25 @@
-// data.js — Sahyog central mock dataset & storage helpers
+// data.js — Sahyog central mock dataset & storage helpers (Kota, Rajasthan)
 
 const SAHYOG_DATA = {
   donors: [
-    { id: 'd1', name: 'Brij Bhumi Dhaba', type: 'Restaurant', lat: 27.5042, lng: 77.6845, contact: '+91-9876543210', active: true },
-    { id: 'd2', name: 'Krishna Sweets & Farsan', type: 'Sweet Shop', lat: 27.5015, lng: 77.6795, contact: '+91-9988776655', active: true },
-    { id: 'd3', name: 'Radha Banquet Hall', type: 'Wedding Venue', lat: 27.4788, lng: 77.6880, contact: '+91-9765432109', active: false },
-    { id: 'd4', name: 'Mathura Fresh Mart', type: 'Grocery Store', lat: 27.4930, lng: 77.6740, contact: '+91-9654321098', active: true },
-    { id: 'd5', name: 'Govind Caterers', type: 'Catering', lat: 27.5110, lng: 77.6690, contact: '+91-9543210987', active: true }
+    { id: 'd1', name: 'Chambal Dhaba & Family Restaurant', type: 'Restaurant', lat: 25.1735, lng: 75.8480, contact: '+91-9876543210', active: true },
+    { id: 'd2', name: 'Jodhpur Sweets & Namkeen', type: 'Sweet Shop', lat: 25.1865, lng: 75.8420, contact: '+91-9988776655', active: true },
+    { id: 'd3', name: 'Hadoti Banquet & Resort', type: 'Wedding Venue', lat: 25.1480, lng: 75.8560, contact: '+91-9765432109', active: false },
+    { id: 'd4', name: 'Kota Fresh Mart', type: 'Grocery Store', lat: 25.1460, lng: 75.8380, contact: '+91-9654321098', active: true },
+    { id: 'd5', name: 'Radhey Caterers & Mess', type: 'Catering & Mess', lat: 25.1380, lng: 75.8320, contact: '+91-9543210987', active: true }
   ],
   volunteers: [
-    { id: 'v1', name: 'Arjun Sharma', role: 'Student', lat: 27.4870, lng: 77.6750, online: true, tripsDone: 34 },
-    { id: 'v2', name: 'Priya Verma', role: 'NGO Worker', lat: 27.5020, lng: 77.6640, online: true, tripsDone: 89 },
-    { id: 'v3', name: 'Rohit Gupta', role: 'Student', lat: 27.4910, lng: 77.6810, online: false, tripsDone: 12 },
-    { id: 'v4', name: 'Sunita Devi', role: 'NGO Worker', lat: 27.5080, lng: 77.6560, online: true, tripsDone: 156 },
-    { id: 'v5', name: 'Karan Yadav', role: 'Student', lat: 27.4830, lng: 77.6900, online: true, tripsDone: 23 }
+    { id: 'v1', name: 'Arjun Sharma', role: 'Student (Talwandi)', lat: 25.1410, lng: 75.8350, online: true, tripsDone: 38 },
+    { id: 'v2', name: 'Priya Verma', role: 'NGO Worker (Dadabari)', lat: 25.1620, lng: 75.8310, online: true, tripsDone: 94 },
+    { id: 'v3', name: 'Rohit Gupta', role: 'Student (Vigyan Nagar)', lat: 25.1490, lng: 75.8420, online: false, tripsDone: 15 },
+    { id: 'v4', name: 'Sunita Devi', role: 'Social Worker (Gumanpura)', lat: 25.1740, lng: 75.8490, online: true, tripsDone: 162 },
+    { id: 'v5', name: 'Karan Meena', role: 'Student (Nayapura)', lat: 25.1850, lng: 75.8440, online: true, tripsDone: 29 }
   ],
   pickupPoints: [
-    { id: 'p1', name: 'Yamuna Kinara Night Shelter', type: 'Night Shelter', lat: 27.4760, lng: 77.6820, capacity: 80 },
-    { id: 'p2', name: 'Seva Bharati Community Kitchen', type: 'Community Kitchen', lat: 27.5030, lng: 77.6680, capacity: 150 },
-    { id: 'p3', name: 'Mathura Railway Station Aid Point', type: 'Aid Point', lat: 27.4950, lng: 77.6650, capacity: 60 },
-    { id: 'p4', name: 'Vrindavan Ashram Kitchen', type: 'Ashram', lat: 27.5750, lng: 77.6950, capacity: 200 }
+    { id: 'p1', name: 'Chambal Kinara Night Shelter', type: 'Night Shelter', lat: 25.1890, lng: 75.8360, capacity: 90 },
+    { id: 'p2', name: 'Seva Bharati Community Kitchen', type: 'Community Kitchen', lat: 25.1610, lng: 75.8280, capacity: 160 },
+    { id: 'p3', name: 'Kota Junction Railway Station Aid Point', type: 'Aid Point', lat: 25.2180, lng: 75.8640, capacity: 75 },
+    { id: 'p4', name: 'Kishorepura Community Kitchen', type: 'Community Kitchen', lat: 25.1770, lng: 75.8240, capacity: 120 }
   ],
   impact: {
     mealsSavedToday: 342,
@@ -31,19 +31,19 @@ const SAHYOG_DATA = {
   }
 };
 
-// ── Initial Seeded Listings: 8 listings spread across Mathura (~3 km radius) ──
+// ── Initial Seeded Listings: 8 listings spread across Kota (~3 km radius) ──
 function getInitialSeededListings() {
   var now = Date.now();
   return [
     {
       id: 'l1',
       donorId: 'd1',
-      title: '🍛 Dal Makhani & Roti (45 servings)',
+      title: '🍛 Dal Baati Churma & Gatte (45 servings)',
       quantity: 45,
       unit: 'servings',
-      lat: 27.5042,
-      lng: 77.6845,
-      locationName: 'Vishram Ghat, Mathura',
+      lat: 25.1735,
+      lng: 75.8480,
+      locationName: 'Gumanpura Main Market, Kota',
       createdAt: now - 25 * 60 * 1000,
       expiresAt: now + 105 * 60 * 1000, // 1h 45m left
       status: 'available',
@@ -54,12 +54,12 @@ function getInitialSeededListings() {
     {
       id: 'l2',
       donorId: 'd2',
-      title: '🍮 Mathura Peda & Besan Laddoo (15 kg)',
+      title: '🍮 Kota Kachori & Ghewar Box (15 kg)',
       quantity: 15,
       unit: 'kg',
-      lat: 27.5015,
-      lng: 77.6795,
-      locationName: 'Chhatta Bazaar, Holi Gate',
+      lat: 25.1865,
+      lng: 75.8420,
+      locationName: 'Nayapura Circle, Kota',
       createdAt: now - 30 * 60 * 1000,
       expiresAt: now + 270 * 60 * 1000, // 4h 30m left
       status: 'available',
@@ -73,25 +73,25 @@ function getInitialSeededListings() {
       title: '🍛 Shahi Paneer & Jeera Rice (60 servings)',
       quantity: 60,
       unit: 'servings',
-      lat: 27.5110,
-      lng: 77.6690,
-      locationName: 'Govind Nagar, Janmabhoomi Marg',
+      lat: 25.1380,
+      lng: 75.8320,
+      locationName: 'Talwandi Commerce Hub, Kota',
       createdAt: now - 50 * 60 * 1000,
       expiresAt: now + 35 * 60 * 1000, // 35m left (urgent!)
       status: 'available',
       urgent: true,
       safetyVerified: true,
-      description: 'Post-event catering surplus, kept hot and fresh.'
+      description: 'Hostel mess dinner surplus, kept piping hot and fresh.'
     },
     {
       id: 'l4',
       donorId: 'd4',
-      title: '🥦 Fresh Apples, Bananas & Spinach (25 kg)',
+      title: '🥦 Fresh Apples, Papaya & Spinach (25 kg)',
       quantity: 25,
       unit: 'kg',
-      lat: 27.4930,
-      lng: 77.6740,
-      locationName: 'Dampier Nagar, Civil Lines',
+      lat: 25.1460,
+      lng: 75.8380,
+      locationName: 'Vigyan Nagar Market, Kota',
       createdAt: now - 45 * 60 * 1000,
       expiresAt: now + 195 * 60 * 1000, // 3h 15m left
       status: 'available',
@@ -102,12 +102,12 @@ function getInitialSeededListings() {
     {
       id: 'l5',
       donorId: 'd1',
-      title: '🍞 Fresh Milk Bread & Pav Buns (40 packets)',
+      title: '🍞 Fresh Pav Buns & Sandwich Bread (40 packets)',
       quantity: 40,
       unit: 'packets',
-      lat: 27.4870,
-      lng: 77.6610,
-      locationName: 'Krishna Nagar Market',
+      lat: 25.1610,
+      lng: 75.8330,
+      locationName: 'Dadabari Chauraha, Kota',
       createdAt: now - 15 * 60 * 1000,
       expiresAt: now + 130 * 60 * 1000, // 2h 10m left
       status: 'available',
@@ -118,18 +118,18 @@ function getInitialSeededListings() {
     {
       id: 'l6',
       donorId: 'd5',
-      title: '🍛 Chole Kulche & Veg Pulao (35 plates)',
+      title: '🍛 Chole Bhature & Veg Pulao (35 plates)',
       quantity: 35,
       unit: 'plates',
-      lat: 27.4820,
-      lng: 77.6675,
-      locationName: 'Mathura Junction Station Road',
+      lat: 25.1420,
+      lng: 75.8470,
+      locationName: 'Mahaveer Nagar Extension, Kota',
       createdAt: now - 40 * 60 * 1000,
       expiresAt: now + 50 * 60 * 1000, // 50m left (urgent!)
       status: 'available',
       urgent: true,
       safetyVerified: true,
-      description: 'Prepared for railway tour group, freshly packed.'
+      description: 'Prepared for student batch lunch, freshly packed.'
     },
     {
       id: 'l7',
@@ -137,9 +137,9 @@ function getInitialSeededListings() {
       title: '📦 Atta Bags & Marie Biscuit Boxes (18 packets)',
       quantity: 18,
       unit: 'packets',
-      lat: 27.5180,
-      lng: 77.6780,
-      locationName: 'Masani Chowk, Mathura North',
+      lat: 25.2180,
+      lng: 75.8640,
+      locationName: 'Station Road, Kota Junction',
       createdAt: now - 10 * 60 * 1000,
       expiresAt: now + 290 * 60 * 1000, // 4h 50m left
       status: 'available',
@@ -150,12 +150,12 @@ function getInitialSeededListings() {
     {
       id: 'l8',
       donorId: 'd2',
-      title: '🍮 Gulab Jamun & Rasgulla Tins (12 kg)',
+      title: '🍮 Moong Dal Halwa & Gulab Jamun (12 kg)',
       quantity: 12,
       unit: 'kg',
-      lat: 27.4740,
-      lng: 77.6720,
-      locationName: 'Dhauli Pyau, Mathura Cantt',
+      lat: 25.1660,
+      lng: 75.8410,
+      locationName: 'Aerodrome Circle, Kota',
       createdAt: now - 35 * 60 * 1000,
       expiresAt: now + 165 * 60 * 1000, // 2h 45m left
       status: 'available',
@@ -185,13 +185,14 @@ function getListings() {
   var valid = [];
 
   if (stored && Array.isArray(stored)) {
-    // 1. Remove expired listings
+    // 1. Remove expired listings or old non-Kota listings
     valid = stored.filter(function(l) {
-      return l && l.expiresAt && (l.expiresAt > now);
+      var isKota = l && l.lat && (l.lat > 24.5 && l.lat < 26.0);
+      return l && l.expiresAt && (l.expiresAt > now) && isKota;
     });
   }
 
-  // 2. If no valid unexpired listings exist, reseed with 8 fresh Mathura listings
+  // 2. If no valid unexpired Kota listings exist, reseed with 8 fresh Kota listings
   if (valid.length === 0) {
     valid = getInitialSeededListings();
     saveListings(valid);
@@ -200,7 +201,7 @@ function getListings() {
     if (valid.length > 15) {
       valid = valid.slice(0, 15);
     }
-    // If any expired were pruned or capped, persist back
+    // If any expired or non-Kota were pruned or capped, persist back
     if (!stored || valid.length !== stored.length) {
       saveListings(valid);
     }
@@ -231,14 +232,20 @@ function saveImpact(impact) {
 
 // ── Need data (for heatmap & smart match) ─────────────────
 var DEFAULT_NEED_DATA = {
-  p1: { needLevel: 'High',     mealsNeeded: 60,  label: 'Yamuna Kinara Night Shelter' },
-  p2: { needLevel: 'Medium',   mealsNeeded: 40,  label: 'Seva Bharati Community Kitchen' },
-  p3: { needLevel: 'Critical', mealsNeeded: 85,  label: 'Railway Station Aid Point' },
-  p4: { needLevel: 'Low',      mealsNeeded: 20,  label: 'Vrindavan Ashram Kitchen' }
+  p1: { needLevel: 'High',     mealsNeeded: 65,  label: 'Chambal Kinara Night Shelter' },
+  p2: { needLevel: 'Medium',   mealsNeeded: 45,  label: 'Seva Bharati Community Kitchen' },
+  p3: { needLevel: 'Critical', mealsNeeded: 90,  label: 'Kota Junction Aid Point' },
+  p4: { needLevel: 'Low',      mealsNeeded: 25,  label: 'Kishorepura Community Kitchen' }
 };
 
 function getNeedData() {
-  return loadFromStorage('need_data', DEFAULT_NEED_DATA);
+  var d = loadFromStorage('need_data', null);
+  // Auto-upgrade if empty or old Mathura data
+  if (!d || !d.p1 || (d.p1.label && d.p1.label.indexOf('Yamuna') !== -1)) {
+    d = DEFAULT_NEED_DATA;
+    saveNeedData(d);
+  }
+  return d;
 }
 
 function saveNeedData(d) {

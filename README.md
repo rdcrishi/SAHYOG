@@ -2,7 +2,7 @@
 
 > *"Food that's surplus to you is a meal to someone."*
 
-Sahyog is a hyper-local surplus food redistribution web app prototype connecting surplus food donors (restaurants, caterers, grocery stores, wedding venues) with volunteers and community pickup points (night shelters, community kitchens) in **Mathura, Uttar Pradesh**.
+Sahyog is a hyper-local surplus food redistribution web app prototype connecting surplus food donors (restaurants, caterers, grocery stores, wedding venues) with volunteers and community pickup points (night shelters, community kitchens) in **Kota, Rajasthan**.
 
 ---
 
@@ -25,9 +25,9 @@ Sahyog bridges this gap in four seamless steps:
 
 | Page | Key Features |
 |------|--------------|
-| **Home (`index.html`)** | Hero with Mathura context; live animated stats strip (meals saved today, active listings, volunteers online); 3-way role switcher (`Donor`, `Volunteer`, `Shelter`); listings feed with skeletons, empty &amp; error states; role-specific callouts. |
+| **Home (`index.html`)** | Hero with Kota context; live animated stats strip (meals saved today, active listings, volunteers online); 3-way role switcher (`Donor`, `Volunteer`, `Shelter`); listings feed with skeletons, empty &amp; error states; role-specific callouts. |
 | **Donate (`donate.html`)** | Fast 1-screen listing flow; category icon tiles (Cooked, Bakery, Produce, Packaged, Sweets); +/- stepper + quick picks (10, 20, 50, 100); shelf-life chips; interactive mini-map pin repositioning; 3-point hygiene checklist generating a **"Safety verified"** badge; live progress bar + listing timer; celebratory success card. |
-| **Live Map (`map.html`)** | Leaflet.js + OpenStreetMap with Mathura coordinates; urgency-based custom map markers with pulsing red pins; community pickup point icons; scrollable feed with dynamic SVG spoilage countdown rings; real-time listing simulation every 20–40s; map &amp; feed loading skeletons, friendly error states, and empty states. |
+| **Live Map (`map.html`)** | Leaflet.js + OpenStreetMap with Kota coordinates; urgency-based custom map markers with pulsing red pins; community pickup point icons; scrollable feed with dynamic SVG spoilage countdown rings; real-time listing simulation every 20–40s; map &amp; feed loading skeletons, friendly error states, and empty states. |
 | **Claim & Deliver Flow** | 4-step slide-up drawer (`Claimed` → `Picked Up` → `On the Way` → `Delivered`); route line drawn between donor and nearest shelter; animated volunteer courier marker; "Spoilage Safe?" buffer calculation; 4-digit PIN verification modal; persistent "My Drops" history. |
 | **Need Heatmap & Smart Match** | Soft glowing circles sized and coloured by shelter need (Low, Medium, High, Critical); Shelter Manager role form to update tonight's meal requirement; "Smart Match" button with one-line heuristic justification. |
 | **Impact Dashboard (`impact.html`)** | Animated count-up statistics; Chart.js 7-day daily meals bar chart; Top Donors leaderboard with medal ranks (🥇, 🥈, 🥉) and badges (*Community Star*, *100 Meals Hero*, *Zero Waste Champion*); Top Volunteers leaderboard; community milestones; downloadable PNG summary tile generated via native HTML5 Canvas. |
@@ -118,7 +118,7 @@ sahyog/
 ├── map.html            # Split Live Map, claim drawer, and shelter heatmap
 ├── impact.html         # Impact metrics, 7-day chart, leaderboards, share tile
 ├── style.css           # Global stylesheet and responsive design system
-├── data.js             # Mathura mock dataset & localStorage state helpers
+├── data.js             # Kota mock dataset & localStorage state helpers
 ├── app.js              # Shared navbar, 3-way role switcher, toast, and guided demo tour
 ├── README.md           # Project documentation and demo guide
 └── pages/

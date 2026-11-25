@@ -12,7 +12,7 @@ class NotebookPDF(FPDF):
             self.set_xy(12, 4)
             self.cell(130, 8, 'PROJECT NOTEBOOK SCRIPT: SAHYOG (FOOD REDISTRIBUTION)', new_x=XPos.RIGHT, new_y=YPos.TOP)
             self.set_font('Helvetica', '', 8.5)
-            self.cell(56, 8, 'Mathura, UP | Web Tech Project', new_x=XPos.LMARGIN, new_y=YPos.NEXT, align='R')
+            self.cell(56, 8, 'Kota, RJ | Web Tech Project', new_x=XPos.LMARGIN, new_y=YPos.NEXT, align='R')
             self.ln(6)
         else:
             self.set_fill_color(248, 250, 248)
@@ -42,7 +42,7 @@ pdf.cell(0, 8, 'SAHYOG: Hyper-Local Surplus Food Redistribution', new_x=XPos.LMA
 
 pdf.set_font('Helvetica', 'I', 9.5)
 pdf.set_text_color(107, 114, 128)
-pdf.cell(0, 5, 'Real-Time Spoilage-Aware Food Recovery & Volunteer Logistics Platform (Mathura, UP)', new_x=XPos.LMARGIN, new_y=YPos.NEXT)
+pdf.cell(0, 5, 'Real-Time Spoilage-Aware Food Recovery & Volunteer Logistics Platform (Kota, Rajasthan)', new_x=XPos.LMARGIN, new_y=YPos.NEXT)
 pdf.ln(2)
 
 # Divider
@@ -82,7 +82,7 @@ def bullet_point(bold_prefix, txt):
 
 # 1. Project Overview & Problem Statement
 section_title('1. PROJECT OVERVIEW & PROBLEM STATEMENT')
-bullet_point('The Paradox:', 'India wastes an estimated 68 million tons of food annually while malnutrition remains persistent. In pilgrimage hubs like Mathura, restaurants, dhabas, sweet shops, and wedding venues generate high volumes of surplus meals daily.')
+bullet_point('The Paradox:', 'India wastes an estimated 68 million tons of food annually while malnutrition remains persistent. In major educational and urban centers like Kota, restaurants, mess facilities, sweet shops, and hostel canteens generate high volumes of surplus meals daily.')
 bullet_point('The Critical Bottleneck:', 'Cooked surplus food perishes rapidly (within 2 to 6 hours). Traditional charity models fail because phone-based coordination and lengthy paperwork take too long, allowing food to spoil before it can be collected.')
 bullet_point('The Sahyog Solution:', 'Sahyog is a hyper-local, real-time web application engineered to enable 30-second surplus food listing, live spoilage tracking, and rapid volunteer dispatch to nearby night shelters and community kitchens.')
 
@@ -99,7 +99,7 @@ bullet_point('Hygiene Verification:', '3-point mandatory checklist (Freshly prep
 bullet_point('Automated Location:', 'Auto-filled donor GPS coordinates with an interactive Leaflet mini-map pin adjuster.')
 
 sub_title('B. Spoilage Clocks & Live Interactive Map')
-bullet_point('CARTO Positron Mapping:', 'Integrated Leaflet.js with clean vector-style CARTO tiles for high-contrast viewing.')
+bullet_point('OpenStreetMap Mapping:', 'Integrated Leaflet.js with clean vector-style OpenStreetMap tiles for high-contrast viewing.')
 bullet_point('Urgency Pin Visualization:', 'Color-coded markers based on remaining shelf life: Green (>3 hrs), Amber (1 to 3 hrs), and Pulsing Red (<1 hr) for immediate volunteer awareness.')
 bullet_point('SVG Spoilage Clocks:', 'Feed cards feature dynamic countdown SVG rings updating every second from green to orange to red.')
 bullet_point('Real-Time Simulation:', 'Simulates a living ecosystem with incoming mock listings and automated expiry fading.')
@@ -127,13 +127,13 @@ bullet_point('Shareable Impact Tile:', 'Generates an exportable HTML5 summary gr
 section_title('4. TECHNICAL STACK & ARCHITECTURAL HIGHLIGHTS')
 bullet_point('Frontend Stack:', 'Pure Semantic HTML5, CSS3 Custom Properties (CSS variables), Vanilla JavaScript (ES6+).')
 bullet_point('Zero Build Dependencies:', 'Runs natively in any browser without npm build chains, Webpack, or framework overhead.')
-bullet_point('Mapping & Data Visualization:', 'Leaflet.js v1.9.4 with CARTO Positron tiles + Chart.js via high-speed CDN.')
+bullet_point('Mapping & Data Visualization:', 'Leaflet.js v1.9.4 with OpenStreetMap tiles + Chart.js via high-speed CDN.')
 bullet_point('State Management & Offline:', 'Decoupled localStorage persistence layer with automatic stale/expired listing pruning.')
 bullet_point('Accessibility & Responsiveness:', 'WCAG AA compliant contrast ratios, full keyboard navigation, aria-labels, and fluid mobile scaling down to 375px.')
 
 # 5. Presentation / Viva Voce Script
 section_title('5. NOTEBOOK PRESENTATION SCRIPT (FOR VIVA / DEMO)')
-body_text('"Good morning/afternoon. My project is Sahyog, a hyper-local surplus food redistribution web application designed to eliminate urban food waste and hunger in Mathura.')
+body_text('"Good morning/afternoon. My project is Sahyog, a hyper-local surplus food redistribution web application designed to eliminate urban food waste and hunger in Kota.')
 body_text('The core problem in food charity is not food availability, but speed of coordination. Cooked meals perish within 2 to 6 hours. Sahyog solves this with three key innovations:')
 bullet_point('1. Rapid Listing:', 'Donors post food surplus in under 30 seconds with category tiles, quantity steppers, and a 3-point hygiene safety verification.')
 bullet_point('2. Spoilage-Aware Logistics:', 'Live Leaflet map with pulsing urgency pins, SVG spoilage countdown clocks, and a Smart Match engine connecting food to the closest high-need shelter.')
